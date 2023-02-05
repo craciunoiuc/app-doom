@@ -1,0 +1,19 @@
+---
+specification: '0.12.0'
+name: doom
+unikraft:
+  version: staging
+  kconfig:
+    - CONFIG_LIBUKLIBPARAM=y
+    - CONFIG_LIBVFSCORE_AUTOMOUNT_ROOTFS=y
+    - CONFIG_LIBVFSCORE_ROOTFS="initrd" 
+targets:
+  - architecture: x86_64
+    platform: kvm
+libraries:
+  musl:
+    version: staging
+volumes:
+  initrd:
+    driver: initrd
+    source: ./initrd.cpio
