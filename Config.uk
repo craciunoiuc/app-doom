@@ -1,0 +1,6 @@
+### Invisible option for dependencies
+config APPDOOM
+	bool
+	default y
+	select LIBMUSL
+	select LIBVFSCORE_ROOTFS

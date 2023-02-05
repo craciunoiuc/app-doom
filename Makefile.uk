@@ -1,0 +1,161 @@
+#  SPDX-License-Identifier: BSD-3-Clause
+#
+#  Redis Makefile.uk
+#
+#  Authors:   Cezar Craciunoiu <cezar.craciunoiu@gmail.com>
+#
+#  Copyright (c) 2019, University Politehnica of Bucharest. All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions
+#  are met:
+#
+#  1. Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+
+################################################################################
+# Library registration
+################################################################################
+$(eval $(call addlib,appdoom))
+
+################################################################################
+# Sources
+################################################################################
+APPDOOM_VERSION=0.1.1
+APPDOOM_URL=https://github.com/wojciech-graj/doom-ascii/archive/refs/tags/v$(APPDOOM_VERSION).zip
+APPDOOM_BASENAME=doom-ascii-$(APPDOOM_VERSION)
+APPDOOM_PATCHDIR=$(APPDOOM_BASE)/patches
+$(eval $(call fetch,appdoom,$(APPDOOM_URL)))
+# $(eval $(call patch,appdoom,$(APPDOOM_PATCHDIR),$(APPDOOM_BASENAME)))
+
+################################################################################
+# Helpers
+################################################################################
+APPDOOM_SRC  = $(APPDOOM_ORIGIN)/$(APPDOOM_BASENAME)/src
+# APPDOOM_DEPS = $(APPDOOM_ORIGIN)/$(APPDOOM_BASENAME)/deps
+
+################################################################################
+# Library includes
+################################################################################
+CINCLUDES-y   += -I$(APPDOOM_BASE)/include
+CXXINCLUDES-y += -I$(APPDOOM_BASE)/include
+
+APPDOOM_CINCLUDES-y += -I$(APPDOOM_DEPS)/src
+
+################################################################################
+# Flags
+################################################################################
+# Suppress some warnings to make the build process look neater
+APPDOOM_FLAGS_SUPPRESS = -Wno-uninitialized -Wno-unused-parameter
+APPDOOM_FLAGS = -DNORMALUNIX -DLINUX -D_DEFAULT_SOURCE
+APPDOOM_CFLAGS-y += $(APPDOOM_FLAGS_SUPPRESS) $(APPDOOM_FLAGS)
+
+################################################################################
+# Doom sources
+################################################################################
+# APPDOOM_SRCS-y += $(APPDOOM_BASE)/glue.c
+
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/i_joystick.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/d_event.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/doomdef.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/i_video.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/r_draw.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/m_cheat.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_mobj.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_ceilng.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/m_controls.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_tick.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/r_sky.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/w_file.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/i_endoom.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/hu_stuff.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/m_random.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/hu_lib.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/i_input.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/f_wipe.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/m_bbox.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/gusconf.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/w_checksum.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/d_mode.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_maputl.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/i_system.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/sha1.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/am_map.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/info.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/i_timer.c
+# APPDOOM_SRCS-y += $(APPDOOM_SRC)/.default.cfg
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/memio.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/sounds.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_floor.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/statdump.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_inter.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_sight.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/d_iwad.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_plats.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/r_main.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/m_fixed.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/dummy.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/s_sound.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/i_main.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/r_things.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/g_game.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/w_file_stdc.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_switch.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/d_net.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/doomstat.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/m_config.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_user.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/tables.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/m_argv.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_lights.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/r_segs.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/d_items.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/st_lib.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_pspr.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/i_scale.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/r_data.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/v_video.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/w_main.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/z_zone.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/f_finale.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_map.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/dstrings.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/icon.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/w_wad.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/r_bsp.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/doomgeneric_ascii.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/doomgeneric.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/i_sound.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/i_cdmus.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_setup.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/st_stuff.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/m_misc.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_telept.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_doors.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/wi_stuff.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/d_main.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_enemy.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_spec.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/d_loop.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/m_menu.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/r_plane.c
+APPDOOM_SRCS-y += $(APPDOOM_SRC)/p_saveg.c
